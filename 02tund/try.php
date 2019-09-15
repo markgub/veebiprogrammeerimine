@@ -7,10 +7,19 @@
 	if($hourNow >= 6 and $hourNow < 12){
 		$welcome = "Tere hommikust!";
 		$partOfDay = "hommik";
-	} elseif ($hourNow == 17){
+	}  elseif ($hourNow == 12){
 		$welcome = "Tervist! \r\nPraegu on hea aeg selleks, et võtta endale lõunat!";
 		$partOfDay = "lõuna aeg";
-	} 
+	} elseif ($hourNow < 18 and $hourNow > 12) {
+		$welcome = "Tere päevast!";
+		$partOfDay = "pärastlõuna";
+	} elseif ($hourNow >= 18){
+		$welcome = "Tere õhtust!";
+		$partOfDay = "õhtu";
+	} elseif ($hourNow < 6){
+		$welcome = "Tere! Mida Teie teete siin ni hilja?";
+		$partOfDay = "öö";
+	} //Võib-olla oleks parem kasutada siin switch funktsiooni
 ?>
 
 <!DOCTYPE html>
