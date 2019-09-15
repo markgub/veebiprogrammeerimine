@@ -3,9 +3,14 @@
 	$fullTimeNow = date("d.m.Y H:i:s"); //Väike y oleks 19 ja suur - 2019
 	$hourNow = date("H"); //Ainult tundi saame
 	$partOfDay = "hägune aeg";
-	if($hourNow < 8){
-		$partOfDay = "varane hommik";
-	}
+	$welcome = "Tere";
+	if($hourNow >= 6 and $hourNow < 12){
+		$welcome = "Tere hommikust!";
+		$partOfDay = "hommik";
+	} elseif ($hourNow == 17){
+		$welcome = "Tervist! \r\nPraegu on hea aeg selleks, et võtta endale lõunat!";
+		$partOfDay = "lõuna aeg";
+	} 
 ?>
 
 <!DOCTYPE html>
@@ -18,9 +23,10 @@
 	<body> <!--See, mis on näha lehel, kohustuslike elemente pole-->
 		<?php
 			echo "<h1>" .$userName . " koolitöö leht </h1>";
+			echo nl2br($welcome);
 		?>
 		<p> See leht on loodud koolis õppetöö raames 
-		ja ei sisalda tõsiseltvõetavat sisu! </p> <!--Ükski tekst ei veedele niisama-->
+		ja ei sisalda tõsiseltvõetavat sisu. </p> <!--Ükski tekst ei veedele niisama-->
 		
 		<p> Kasutame php serverit, mille kohta saaab infot <a href="serverinfo.php">siit<a>! </p>
 		<hr>
