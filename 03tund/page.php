@@ -2,8 +2,17 @@
 	$userName = "Mark-Krilli";
 	$photoDir = "../photos/";
 	$picFileTypes = ["image/jpeg", "image/png"];
-	$fullTimeNow = date("d.m.Y H:i:s"); //Väike y oleks 19 ja suur - 2019
+	
+	//Nädalapäevad
+	$daysOfWeekET = ["esmaspäev", "teisipäev", "kolpmapäev", "neljapäev", "reede", "laupäev", "pühapäev"];
+	//12Kuud
+	$monthsET = ["jaanuar", "veebruar", "märts", "aprill", "mai", "juuni", "juuli", "august", "september", "oktoober", "november", "detsember"];
+	
+	//Praegune aeg
+	$monthNow = date("n");
+	$fullTimeNow = date("d") .". " .$monthsET[$monthNow-1] ." " .date("Y H:i:s"); //Väike y oleks 19 ja suur - 2019
 	$hourNow = date("H"); //Ainult tundi saame
+	$dayNow = date("N");
 	$partOfDay = "hägune aeg";
 	$welcome = "Tere";
 	if($hourNow >= 6 and $hourNow < 12){
@@ -23,6 +32,11 @@
 		$partOfDay = "öö";
 	} //Võib-olla oleks parem kasutada siin switch funktsiooni
 	
+	//Nädalapäevad
+	$daysOfWeekET = ["esmaspäev", "teisipäev", "kolpmapäev", "neljapäev", "reede", "laupäev", "pühapäev"];
+	//12Kuud
+	$monthsET = ["jaanuar", "veebruar", "märts", "aprill", "mai", "juuni", "juuli", "august", "september", "oktoober", "november", "detsember"];
+	
 	
 	//info semestri kulgemise kohta
 	$semesterStart = new DateTime("2019-9-2");
@@ -31,18 +45,24 @@
 	$today = new DateTime("now");
 	$fromSemesterStart = $semesterStart->diff($today);
 	//var_dump($fromSemesterStart); //echo-ga saab väljastada stringe ja arve, mitte objekti
-	$semesterInfoHTML = "<p>ERROR: Siin peaks olema info semestri kulgemise kohta!";
+	$semesterInfoHTML = "<p>ERROR: Siin peaks olema info semestri kulgemise kohta!</p>";
 	$elapsedValue = $fromSemesterStart->format("%r%a");
 	$durationValue = $semesterDuration->format("%r%a");
 	//echo $testValue;
 	//<meter min="0" max="155" value="55">Mingi väärtus</meter> Eeskuju
-	if($elapsedValue > 0){
+	if($elapsedValue > 0 and $elapsedValue <= $durationValue){
 		$semesterInfoHTML = "<p>Semester on täies hoos: ";
 		$semesterInfoHTML .= '<meter min="0" max="' .$durationValue .'" '; //Peab olema tühik
 		$semesterInfoHTML .= 'value="' .$elapsedValue .'">';
 		$semesterInfoHTML .= round($elapsedValue/$durationValue*100, 1) ."%";
 		$semesterInfoHTML .= "</meeter>";
 		$semesterInfoHTML .= "</p>";
+	} elseif($elapsedValue > $durationValue) {
+		$semesterInfoHTML = "<p>Semester on lõppenud.</p>";
+	} elseif($elapsedValue < 0){
+		$semesterInfoHTML = "<p>Semester ei ole veel alanud.</p>";
+	} else {
+		$semesterInfoHTML = "<p>ERROR: Siin peaks olema info semestri kulgemise kohta!</p>"; 
 	}
 	
 	//foto lisamine lehel
@@ -83,7 +103,7 @@
 		<hr>
 		<p> Lehe avamise hetkel oli aeg: 
 		<?php
-			echo $fullTimeNow;
+			echo $daysOfWeekET[$dayNow-1]. " ". $fullTimeNow;
 		?>
 		.</p>
 		<?php

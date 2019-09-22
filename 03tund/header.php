@@ -1,7 +1,8 @@
-<!DOCTYPE html>
-<html lang = "et">
-	<head> <!--Sisu ei paista tavaliselt, siin asuvad kohustuslikud elementid-->
-		<meta charset = "utf-8">
-		<title> Wenepooh on kollane </title>
-
-	</head>
+<?php
+$HTMLcode = "<html lang = 'et'> ";
+$HTMLcode .= "<head> ";
+$HTMLcode .= "<meta charset = 'utf-8'> ";
+$HTMLcode .= "<title> Wenepooh on kollane </title> ";
+$HTMLcode .= "</head>";
+echo $HTMLcode;
+?>
