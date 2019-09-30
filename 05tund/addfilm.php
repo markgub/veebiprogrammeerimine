@@ -30,7 +30,7 @@
 		<hr>
 		<h2> Eesti filmid, lisame uue</h2>
 		<p> Täida kõik failid ja lisa film andmebaasi</p>
-		<form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+		<form method="POST">
 			<label> Sisesta pealkiri: </label> <input type="text" name="filmTitle">
 			<br>
 			<label> Filmi tootmis aasta: </label> <input tyoe="number" min="1912" max="2019"
