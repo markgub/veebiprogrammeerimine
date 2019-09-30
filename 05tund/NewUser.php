@@ -2,11 +2,11 @@
 	require("../../../config_vp2019.php");
 	require("functions_main.php");
 	require("functions_user.php");
-	$dataBase = "if19_mark_gu_1";
+	$database = "if19_mark_gu_1";
 	
 	$notice = null;
 	$name = null;
-	$surname = null;
+	$surName = null;
 	$email = null;
 	$gender = null;
 	$birthMonth = null;
@@ -47,10 +47,11 @@
   $surName = $_POST["surName"];
   $gender = $_POST["gender"];
   $email = test_input($_POST["email"]);
+  //strlen($_POST["password"]) <8, siis on viiga
   //
   
 	//kontrollime, kas sünniaeg sisestati ja kas on korrektne
-	  if(isset($_POST["birthDay"]) and !empty($_POST["birthDay"])){
+	if(isset($_POST["birthDay"]) and !empty($_POST["birthDay"])){
 		  $birthDay = intval($_POST["birthDay"]);
 	  } else {
 		  $birthDayError = "Palun vali sünnikuupäev!";
@@ -79,7 +80,7 @@
 	  } //Kuupäeva valiidsus
 		//Kui kõik on korras, salvestame
 		if(empty($nameError) and empty($surnameError) and empty($birthMonthError) and empty($birthYearError) and empty($birthDayError) and empty($birthDateError) and empty($genderError) and empty($emailError) and empty($passwordError) and empty($confirmpasswordError)){
-			$notice = signUp($name, $surname, $email, $gender, $birthDate, $_POST["password"]);
+			$notice = signUp($name, $surName, $email, $gender, $birthDate, $_POST["password"]);
 		}
 	} //Kui on nuppu vajutatud
 ?>
@@ -99,7 +100,7 @@
 	  <label>Eesnimi:</label><br>
 	  <input name="firstName" type="text" value="<?php echo $name; ?>"><span><?php echo $nameError; ?></span><br>
       <label>Perekonnanimi:</label><br>
-	  <input name="surName" type="text" value="<?php echo $surname; ?>"><span><?php echo $surnameError; ?></span>
+	  <input name="surName" type="text" value="<?php echo $surName; ?>"><span><?php echo $surnameError; ?></span>
 	  <br>
 	  <input type="radio" name="gender" value="2" <?php if($gender == "2"){echo " checked";} ?>><label>Naine</label>
 	  <input type="radio" name="gender" value="1" <?php if($gender == "1"){echo " checked";} ?>><label>Mees</label>
