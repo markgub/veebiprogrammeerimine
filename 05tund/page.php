@@ -2,6 +2,11 @@
 	$userName = "Mark-Krilli";
 	$photoDir = "../photos/";
 	$picFileTypes = ["image/jpeg", "image/png"];
+	$notice = null;
+	require("../../../config_vp2019.php");
+	require("functions_user.php");
+	require("functions_main.php");
+	$database = "if19_mark_gu_1";
 	
 	//Nädalapäevad
 	$daysOfWeekET = ["esmaspäev", "teisipäev", "kolpmapäev", "neljapäev", "reede", "laupäev", "pühapäev"];
@@ -78,6 +83,27 @@
 	$photoFile = $photoDir .$allPhotos[$picNum];
 	$randomImgHTML = '<img src="' .$photoFile .'" alt="TLÜ Terra õppehoone">'; //Ülekomad on ebamugavad
 	
+	//Andmed sisselogimiseks
+	$email = null;
+	$emailError = null;
+	$passwordError = null;
+	//Kui on sisselogimise nuppu vajutatud
+	if(isset($_POST["submitUserData"])){
+		if(isset($_POST["email"]) and !empty($_POST["email"])){
+			$email = test_input($_POST["email"]);
+		} else {
+			$emailError = "Palun sisestage oma email"; 
+		}
+		
+		if(isset($_POST["password"]) and !empty($_POST["password"])){
+		} else {
+			$passwordError = "Palun sisestage oma salasõna"; 
+		}
+	}
+	//Kui kõik on korras andmetega
+	if(empty($emailError) and empty($passwordError) and isset($_POST["password"])){
+		$notice = signIn($email, $_POST["password"]);
+	}
 	//lisame lehe päise
 	require("header.php");
 ?>
@@ -100,9 +126,17 @@
 			echo $daysOfWeekET[$dayNow-1]. " ". $fullTimeNow;
 		?>
 		.</p>
+		<form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
 		<?php
 			echo "<p> Lehe avamise hetkel oli " .$partOfDay .".</p>";
 		?>
+		<br>
+		<form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+			<label>E-mail (kasutajatunnus):</label><br>
+			<input type="email" name="email" value="<?php echo $email; ?>"><span><?php echo $emailError; ?></span><br>
+			<label>Parool:</label><br>
+			<input type="password" name="password"><span><?php echo $passwordError; ?></span><br>
+			<input type="submit" name="submitUserData" value="Sisene"><span><?php echo $notice; ?></span>
 		<hr>
 		<?php
 		echo $randomImgHTML;

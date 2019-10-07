@@ -23,6 +23,28 @@
 	}
 	
 	function signIn($email, $password){
+		$notice = null;
+		$conn = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]);
+		$stmt = $conn->prepare("SELECT firstname, lastname, password FROM vpusers3 WHERE email = ?");
+		echo $conn->error;
+		$stmt->bind_param("s", $email);
+		if($stmt->execute()){
+		} else {
+			$notice = "Midagi läks valesti.";
+			echo $conn->error;
+		}
+		
+		$stmt->bind_result($name, $surname, $passwordFromDB);
+		$stmt->fetch();
+		if(password_verify($password, $passwordFromDB)) {
+			$notice = "Sisse logis " .$name ." " .$surname;
+		} else {
+			$notice = "Kasutajatunnus ja/või salasõna on valed";
+		}
+		
+		$stmt->close();
+		$conn->close();
+		return $notice;
 		//Parooli õigsust kontrollib:
 		//if(password_verify($password, $passwordFromDB))
 	}
