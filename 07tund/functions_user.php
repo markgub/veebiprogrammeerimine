@@ -107,17 +107,36 @@
 	function ProfileSave($userid, $mydescription, $mybgcolor, $mytxtcolor){
 		$notice2 = null;
 		$conn = new mysqli ($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]);
-		$stmt = $conn->prepare("INSERT INTO vpuserprofiles (userid, description, bgcolor, txtcolor) VALUES(?, ?, ?, ?)");
-		echo $conn->error;
-		
-		$stmt->bind_param("isss", $userid, $mydescription, $mybgcolor, $mytxtcolor);
-		
-		if($stmt->execute()){
-			$notice2 = "Profiili häälestamine õnnestus!";
-		} else {
-			$notice2 = "Profiili salvestamisel tekkis tehniline viga: " .$stmt->error;
+		$stmt = $conn->prepare("SELECT id FROM vpuserprofiles WHERE userid = ?");
+		$stmt->bind_param("i", $userid);
+		$stmt->bind_result($idFromDb);
+		$stmt->execute();
+		if($stmt->fetch()){
+			//profiil juba olemas, uuendame
+			$stmt->close();
+			$stmt = $conn->prepare("UPDATE vpuserprofiles SET description = ?, bgcolor = ?, txtcolor = ? WHERE userid = ?");
+			echo $conn->error;
+			$stmt->bind_param("sssi", $mydescription, $mybgcolor, $mytxtcolor, $userid);
+			if($stmt->execute()){
+				$notice2 = "Profiil edukalt uuendatud";
+			} else {
+				$notice2 = "Profiili uuendamisel tekkis viga";
+			}
+			//$notice = "Profiil olemas, ei salvestanud midagi!";
+		}else { 
+			//Profiili pole, salvestame
+			$stmt->close();
+			$stmt = $conn->prepare("INSERT INTO vpuserprofiles (userid, description, bgcolor, txtcolor) VALUES(?, ?, ?, ?)");
+			echo $conn->error;
+			
+			$stmt->bind_param("isss", $userid, $mydescription, $mybgcolor, $mytxtcolor);
+			
+			if($stmt->execute()){
+				$notice2 = "Profiili häälestamine õnnestus!";
+			} else {
+				$notice2 = "Profiili salvestamisel tekkis tehniline viga: " .$stmt->error;
+			}
 		}
-		
 		$stmt->close();
 		$conn->close();
 		return $notice2;

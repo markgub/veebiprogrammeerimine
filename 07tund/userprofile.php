@@ -3,8 +3,8 @@
 	require("functions_user.php");
 	require("functions_main.php");
 	$database = "if19_mark_gu_1";
-	$notice = null;
-	$notice2 = "";
+	$noticeRead = null;
+	$noticeSave = "";
 	$mydescription = "Oota mida?";
 	$mybgcolor = null;
 	$mytxtcolor = null;
@@ -27,42 +27,41 @@
 	
 	$userName = $_SESSION["userFirstName"] ." " .$_SESSION["userLastName"];
 	
-	$notice = profileRead($_SESSION["userID"]);
+	$noticeRead = profileRead($_SESSION["userID"]);
 	$mydescription = $_SESSION["userDescription"];
+	$mybgcolor = $_SESSION["user_bgcollor"];
+	$mytxtcolor = $_SESSION["user_txtcollor"];
 	
 	//Kui on profiili salvestamise nuppu vajutatud
 	if(isset($_POST["submitProfile"])){
 		//Kui on sisestatud kirjeldus
-		if(isset($_POST["description"]) and !empty($_POST["description"])){
+		/*if(isset($_POST["description"]) and !empty($_POST["description"])){
 			$mydescription = test_input($_POST["description"]);
 		} else {
 			$descriptionError = "Palun kirjeldage ennast!" ."<br>";
-		} 
+		} */
 		
 		$mybgcolor = test_input($_POST["bgcolor"]);
 		$mytxtcolor = test_input($_POST["txtcolor"]);
 		
-		if($notice != null and $descriptionError == null){
+		$noticeSave = ProfileSave($_SESSION["userID"], $mydescription, $mybgcolor, $mytxtcolor);
+		$noticeRead = profileRead($_SESSION["userID"]);
+		$mydescription = $_SESSION["userDescription"];
+		
+		/*if($notice != null and $descriptionError == null){
 			$notice2 = ProfileSave($_SESSION["userID"], $mydescription, $mybgcolor, $mytxtcolor);
+			$notice = profileRead($_SESSION["userID"]);
+			$mydescription = $_SESSION["userDescription"];
 		} else if($notice == null){
 			$notice2 = "Profiil on juba häälestatud!";
 		} else {
 			$notice2 = "There is problemo, min compadre!";
-		}
+		}*/
 	}
-	$notice = profileRead($_SESSION["userID"]);
-	$mydescription = $_SESSION["userDescription"];
-	
+
+	require("header.php");
 ?>
-<html lang = 'et'>
-	<head>
-		<meta charset = 'utf-8'> 
-		<title> Wenepooh on kollane </title> 
-		<style>
-			body{background-color: <?php echo $_SESSION["user_bgcollor"]?>;
-			color: <?php echo $_SESSION["user_txtcollor"]?>}
-		</style>
-	</head>
+
 
 	<body> <!--See, mis on näha lehel, kohustuslike elemente pole-->
 		<?php
@@ -81,9 +80,9 @@
 		  <input name="submitProfile" type="submit" value="Salvesta profiil"> <br>
 		</form>
 		<?php 
-		echo $notice;
+		echo $noticeRead;
 		echo $descriptionError; 
-		echo $notice2;
+		echo $noticeSave;
 		?>
 	</body>
 </html>

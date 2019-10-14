@@ -24,13 +24,6 @@
 	require("header.php");
 ?>
 
-	<head>
-		<style>
-			body{background-color: <?php echo $_SESSION["user_bgcollor"]?>;
-			color: <?php echo $_SESSION["user_txtcollor"]?>}
-		</style>
-	</head>
-
 	<body> <!--See, mis on näha lehel, kohustuslike elemente pole-->
 		<?php
 			echo "<h1>" .$userName . " koolitöö leht </h1>";
