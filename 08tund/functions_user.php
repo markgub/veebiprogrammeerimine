@@ -142,7 +142,7 @@
 		return $notice2;
 	}
 	
-	function changePassword($userID, $password){
+	function changePassword($userID, $password, $newPassword){
 		$notice = null;
 		$conn = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]);
 		$stmt = $conn->prepare("SELECT password FROM vpusers3 WHERE id = ?");
@@ -159,16 +159,14 @@
 					$stmt = $conn->prepare("UPDATE vpusers3 SET password = ? WHERE id = ?");
 					
 					$options = ["cost" => 12, "salt" => substr(sha1(rand()), 0, 22)];
-					$pwdhash = password_hash($password, PASSWORD_BCRYPT, $options);
+					$pwdhash = password_hash($newPassword, PASSWORD_BCRYPT, $options);
 					echo $conn->error;
 					$stmt->bind_param("si", $pwdhash, $userID);
 					if($stmt->execute()){
 						$notice = "Salasõna edukalt uuendatud";
 					} else {
-						$notice = "Salasõna uuendamisel tekkis viga";
+						$notice = "Salasõna uuendamisel tekkis viga".$stmt->error;
 					}
-				  $stmt->close();
-				  $conn->close();
 				} else {
 				  $notice = "Vale vana salasõna!";
 				}

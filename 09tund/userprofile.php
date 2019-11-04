@@ -59,24 +59,36 @@
 		}*/
 	}
 
-	$notice = null;
+	$noticePassword = null;
 	$oldPasswordError = null;
 	$newPasswordError = null;
 	$controlPasswordError = null;
 	
 	//Kui on parooli muutmise nuppu vajutatud
-	if(isset($_POST["submitPassword"])){
-		if(isset($_POST["newPassword"]) and !empty($_POST["password"]) and strlen($_POST["password"]) >=8){
-		} else if(strlen($_POST["password"]) <8 and !empty($_POST["password"])) {
+	if(isset($_POST["submitNewPassword"])){
+		//Kontrollib uue salasõna pikkust ja olemasolut
+		if(isset($_POST["newPassword"]) and !empty($_POST["newPassword"]) and strlen($_POST["newPassword"]) >=8){
+		} else if(strlen($_POST["newPassword"]) <8 and !empty($_POST["newPassword"])) {
 			$newPasswordError = "Liiga lühike salasõna!";
 		} else {
-			$passwordError = "Palun sisestage salasõna!";
+			$newPasswordError = "Palun sisestage uus salasõna!";
 		}
 		
+		//Kontrollib, kas uus salasõna on õigesti korratud
 		if(isset($_POST["controlPassword"]) and $_POST["controlPassword"] == $_POST["newPassword"]){
 		} else {
 			$controlPasswordError = "Valesti korratud uus salasõna";
-		} 
+		}
+		
+		if(isset($_POST["oldPassword"]) and !empty($_POST["oldPassword"])){
+		} else {
+			$oldPasswordError = "Sisestage vana salasõna!";
+		}
+		
+		//Kontrollib, kas on õige vana salasõna, ning muudab seda, kui vastus on "jah"
+		if(empty($newPasswordError) and empty($controlPasswordError) and empty($oldPasswordError)) {
+			$noticePassword = changePassword($_SESSION["userID"], $_POST["oldPassword"], $_POST["newPassword"]);
+		}
 	}
 	require("header.php");
 ?>
@@ -89,7 +101,7 @@
 		<p> See leht on loodud koolis õppetöö raames 
 		ja ei sisalda tõsiseltvõetavat sisu. </p> <!--Ükski tekst ei veedele niisama-->
 		<hr>
-		<p><a href="?logout=1">Logi välja! </a></p>
+		<p><a href="?logout=1">Logi välja! </a> | <a href="home.php"> Koduleht </a></p>
 		<form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
 			<label>Minu kirjeldus</label><br>
 			<textarea rows="10" cols="80" name="description"><?php echo $mydescription; ?></textarea>
@@ -104,12 +116,13 @@
 			<input type="password" name="newPassword"><span><?php echo $newPasswordError; ?></span><br>
 			<label>Uus parool veel kord:</label><br>
 			<input type="password" name="controlPassword"><span><?php echo $controlPasswordError; ?></span><br>
-			<input type="submitPassword" name="submitNewPassword" value="Muuta salasõna"><span><?php echo $notice; ?></span>
+			<input type="submit" name="submitNewPassword" value="Muuta salasõna"><span></span>
 		</form>
 		<?php 
 		echo $noticeRead;
 		echo $descriptionError; 
 		echo $noticeSave;
+		echo $noticePassword;
 		?>
 	</body>
 </html>
