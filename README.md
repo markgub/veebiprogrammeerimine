@@ -1,3 +1,3 @@
 # veebiprogrammeerimine
 
-Antud repositoorium oli kasutatud ülikooli veebiprogrammeerimise kursuse raames.
+Antud repositoorium oli kasutatud Tallinna Ülikooli veebiprogrammeerimise kursuse raames.
